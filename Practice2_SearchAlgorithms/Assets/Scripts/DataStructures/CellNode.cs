@@ -9,11 +9,13 @@ namespace Assets.Scripts.DataStructures
 {
     public class CellNode : ICloneable
     {
-        private CellInfo cellInfo { get; set; }
+        public CellInfo cellInfo  { get; private set; }
+            
+        private CellNode parent   { get; set; }
 
-        private int G { get; set; }
-        private int H { get; set; }
-        private int F { get; set; }
+        private int      G        { get; set; }
+        private int      H        { get; set; }
+        private int      F        { get; set; }
 
 
 
@@ -25,13 +27,21 @@ namespace Assets.Scripts.DataStructures
             this.F        = this.G + this.H;
         }
 
-
-
         public object Clone()
         {
             var result = new CellNode(this.cellInfo, this.G, this.F);
 
             return result;
         }
+
+
+
+        /*public List<CellNode> Expand()
+        {
+            List < CellNode > childs = new List<CellNode>();
+            CellInfo[] neighbours = cellInfo.WalkableNeighbours();
+
+
+        }*/
     }
 }
