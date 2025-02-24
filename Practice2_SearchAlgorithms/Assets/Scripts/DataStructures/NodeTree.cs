@@ -9,27 +9,25 @@ namespace Assets.Scripts.DataStructures
 {
     public class NodeTree : ICloneable
     {
-        private CellNode root;
         private List<CellNode> childrens;
 
 
 
-        public NodeTree(CellNode root)
+        public NodeTree()
         {
-            this.root = root;
             childrens = new List<CellNode>();
         }
 
 
 
-        public void addChild (CellNode newChild)
+        public void AddChild (CellNode newChild)
         {
             childrens.Add(newChild);
         }
 
         public object Clone()
         {
-            var result = new NodeTree(this.root);
+            var result = new NodeTree();
 
             return result;
         }

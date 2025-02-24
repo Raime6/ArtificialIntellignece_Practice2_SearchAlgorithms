@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DataStructures;
+using Assets.Scripts.SampleMind;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -7,21 +8,18 @@ namespace Assets.Scripts
     public class CharacterBehaviour: MonoBehaviour
     {
         
-        protected Locomotion LocomotionController;
+        protected Locomotion       LocomotionController;
         protected AbstractPathMind PathController;
-        public BoardManager BoardManager { get; set; }
-        protected CellInfo currentTarget;
+        public    BoardManager     BoardManager { get; set; }
+        protected CellInfo         currentTarget;
        
         void Awake()
         {
 
-            PathController = GetComponentInChildren<AbstractPathMind>();
-            PathController.SetCharacter(this);
+            PathController       = GetComponentInChildren<AbstractPathMind>();
+            PathController      .SetCharacter(this);
             LocomotionController = GetComponent<Locomotion>();
             LocomotionController.SetCharacter(this);
-
-            
-
         }
 
         void Update()
