@@ -1,17 +1,29 @@
-﻿using Assets.Scripts.DataStructures;
+﻿using Assets.Scripts.Algorithms;
+using Assets.Scripts.DataStructures;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.SampleMind
 {
     public class AStarMind : AbstractPathMind {
-       
+
+        private AStar aStar;
+        private List<CellNode> goalPath;
+
+        public void Initialize(BoardInfo boardInfo, CellNode startNode)
+        {
+            aStar = new AStar();
+
+            goalPath = aStar.Behaviour(boardInfo, startNode);
+        }
+
         public override Locomotion.MoveDirection GetNextMove(BoardInfo boardInfo, CellInfo currentPos, CellInfo[] goals)
         {
-            
-            //var val = Random.Range(0, 4);
-            //if (val == 0) return Locomotion.MoveDirection.Up;
-            //if (val == 1) return Locomotion.MoveDirection.Down;
-            //if (val == 2) return Locomotion.MoveDirection.Left;
+            Vector2 val = goalPath[0].cellInfo.GetPosition - currentPos.GetPosition;
+
+            if (val.Equals(Vector2.up))   return Locomotion.MoveDirection.Up;
+            if (val.Equals(Vector2.down)) return Locomotion.MoveDirection.Down;
+            if (val.Equals(Vector2.left)) return Locomotion.MoveDirection.Left;
             return Locomotion.MoveDirection.Right;
         }
     }

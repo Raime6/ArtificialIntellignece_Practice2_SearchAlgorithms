@@ -4,6 +4,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
 namespace Assets.Scripts.DataStructures
 {
@@ -11,7 +13,7 @@ namespace Assets.Scripts.DataStructures
     {
         public CellInfo  cellInfo { get; private set; }
             
-        private CellNode parent   { get; set; }
+        public  CellNode parent   { get; set; }
 
         public  float    G        { get; set; }
         private float    H        { get; set; }
@@ -19,7 +21,7 @@ namespace Assets.Scripts.DataStructures
 
 
 
-        public CellNode(CellInfo _cellInfo, CellNode _parent)
+        public CellNode(CellInfo _cellInfo, CellNode _parent, Vector2 cellNodeGoalPosition)
         {
             this.cellInfo = _cellInfo;
             this.parent   = _parent;
@@ -29,9 +31,9 @@ namespace Assets.Scripts.DataStructures
             else
                 G = parent.G + cellInfo.WalkCost;
 
-            this.H        = 0;
+            this.H = CalulateH(cellNodeGoalPosition);
 
-            this.F        = this.G + this.H;
+            this.F = this.G + this.H;
         }
 
         public CellNode(CellInfo _cellInfo, CellNode _parent, float _G, float _H)
@@ -52,26 +54,31 @@ namespace Assets.Scripts.DataStructures
 
 
 
-        public void setParent(CellNode parent)
-        {
-            this.parent = parent;
-        }
-
-
-
-        public List<CellNode> Expand(BoardManager boardManager)
+        public List<CellNode> Expand(BoardInfo boardInfo)
         {
             List<CellNode> childs     = new List<CellNode>();
-            CellInfo[]     neighbours = cellInfo.WalkableNeighbours(boardManager.boardInfo);
+            CellInfo[]     neighbours = cellInfo.WalkableNeighbours(boardInfo);
 
             for (int i = 0; i < neighbours.Length; i++)
             {
-                CellNode node = new CellNode(neighbours[i], this);
+                CellNode node = new CellNode(neighbours[i], this, boardInfo.cellNodeGoalsPosition[0]);
 
                 childs.Add(node);
             }
 
             return childs;
+        }
+
+        private float CalulateH(Vector2 cellNodeGoalPosistion)
+        {
+            Vector2 cellNodePosition = cellInfo.GetPosition;
+
+            return CalculateManhattanDistance(cellNodePosition, cellNodeGoalPosistion);
+        }
+
+        private float CalculateManhattanDistance(Vector2 node, Vector2 nodeGoal)
+        {
+            return Math.Abs(node.x - nodeGoal.x) + Math.Abs(node.y - nodeGoal.y);
         }
     }
 }

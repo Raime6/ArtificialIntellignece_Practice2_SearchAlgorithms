@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.DataStructures;
 using Assets.Scripts.SampleMind;
+using System.Dynamic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -16,10 +17,13 @@ namespace Assets.Scripts
         void Awake()
         {
 
-            PathController       = GetComponentInChildren<AbstractPathMind>();
+            PathController       = GetComponentInChildren<AStarMind>();
             PathController      .SetCharacter(this);
             LocomotionController = GetComponent<Locomotion>();
             LocomotionController.SetCharacter(this);
+
+            CellNode startNode = new CellNode(BoardManager.boardInfo.CellInfos[0, 0], null, Vector2.zero);
+            PathController.GetComponent<AStarMind>().Initialize(BoardManager.boardInfo, startNode);
         }
 
         void Update()

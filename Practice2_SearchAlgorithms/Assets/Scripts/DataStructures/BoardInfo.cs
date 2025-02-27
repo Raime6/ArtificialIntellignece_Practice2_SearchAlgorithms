@@ -22,6 +22,7 @@ namespace Assets.Scripts.DataStructures
         public int NumColumns { get; private set; }
         public int NumRows { get; private set; }
         public CellInfo[,] CellInfos { get; set; }
+        public List<Vector2> cellNodeGoalsPosition = new List<Vector2>();
 
         public List<EnemyBehaviour> Enemies
         {
@@ -140,6 +141,8 @@ namespace Assets.Scripts.DataStructures
             var emptyCells = this.EmptyCells;
             var goalCell = emptyCells[Random.Range(0, emptyCells.Count)];
             goalCell.ItemInCell = new PlaceableItem("Goal", PlaceableItem.ItemType.Goal);
+            cellNodeGoalsPosition.Add(goalCell.GetPosition);
+
             if (forPlanner)
             {
                 GeneratePrerequisites(goalCell.ItemInCell);

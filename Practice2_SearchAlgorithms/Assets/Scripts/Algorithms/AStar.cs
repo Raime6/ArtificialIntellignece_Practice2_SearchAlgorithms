@@ -2,6 +2,7 @@
 using Assets.Scripts;
 using Assets.Scripts.DataStructures;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Assets.Scripts.DataStructures.PlaceableItem;
 
@@ -11,18 +12,20 @@ namespace Assets.Scripts.Algorithms
 {
     public class AStar
     {
-        public CellNode Behaviour(BoardManager boardManager, CellNode startNode, NodeTree tree)
+        public List<CellNode> Behaviour(BoardInfo boardInfo, CellNode startNode)
         {
-            List<CellNode> openList = new List<CellNode>();
-            List<CellNode> sucesors = new List<CellNode>();
+            List<CellNode> openList  = new List<CellNode>();
+            List<CellNode> closeList = new List<CellNode>();
+            List<CellNode> sucesors  = new List<CellNode>();
+
+            List<CellNode> goalPath  = new List<CellNode>();
 
             CellNode node;
 
 
 
             // Behaviour
-            tree.AddChild(startNode);
-            openList.Add(startNode);
+            openList .Add(startNode);
 
             while (true)
             {
@@ -31,18 +34,30 @@ namespace Assets.Scripts.Algorithms
                     return null;
 
                 node = openList[0];
-                openList.RemoveAt(0);
+
+                openList .RemoveAt(0);
+                closeList.Add(node);
 
                 if (node.cellInfo.ItemInCell.Type == ItemType.Goal)
-                    return node;
+                    break;
 
-                sucesors = node.Expand(boardManager);
+                sucesors = node.Expand(boardInfo);
                 for (int i = 0; i < sucesors.Count; i++)
                 {
-                    tree.AddChild(startNode);
-                    InsertOrd(openList, sucesors[i]);
+                    if (!closeList.Contains(sucesors[i]))
+                        InsertOrd(openList, sucesors[i]);
                 }
             }
+
+            do
+            {
+                goalPath.Add(node);
+                node = node.parent;
+            } while (node.parent != null);
+
+            goalPath.Reverse();
+
+            return goalPath;
         }
 
 
