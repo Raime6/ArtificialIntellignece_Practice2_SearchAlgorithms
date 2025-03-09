@@ -32,7 +32,9 @@ namespace Assets.Scripts
         public int rows = 10; //Number of rows in our game board.
         public Count wallCount = new Count(5, 9); //Lower and upper limit for our random number of walls per level.
         public Count leverCount = new Count(3, 6); //Lower and upper limit for our random number of food items per level.
-        
+
+        public GameManager gameManager;
+
         public GameObject exit; //Prefab to spawn for exit.
         public GameObject floorTile; //Array of floor prefabs.
         public GameObject wallTile; //Array of wall prefabs.

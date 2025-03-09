@@ -11,13 +11,13 @@ namespace Assets.Scripts.DataStructures
 {
     public class CellNode : ICloneable
     {
-        public CellInfo  cellInfo { get; private set; }
+        public   CellInfo cellInfo { get; private set; }
             
-        public  CellNode parent   { get; set; }
+        public   CellNode parent   { get; set; }
 
-        public  float    G        { get; set; }
-        private float    H        { get; set; }
-        public  float    F        { get; set; }
+        public   float    G        { get; set; }
+        public   float    H        { get; set; }
+        public   float    F        { get; set; }
 
 
 
@@ -26,7 +26,7 @@ namespace Assets.Scripts.DataStructures
             this.cellInfo = _cellInfo;
             this.parent   = _parent;
 
-            if (parent != null)
+            if (parent == null)
                 G = 0f;
             else
                 G = parent.G + cellInfo.WalkCost;
@@ -61,9 +61,12 @@ namespace Assets.Scripts.DataStructures
 
             for (int i = 0; i < neighbours.Length; i++)
             {
-                CellNode node = new CellNode(neighbours[i], this, boardInfo.cellNodeGoalsPosition[0]);
+                if(neighbours[i] != null)
+                {
+                    CellNode node = new CellNode(neighbours[i], this, new Vector2(boardInfo.Exit.ColumnId, boardInfo.Exit.RowId));
 
-                childs.Add(node);
+                    childs.Add(node);
+                }
             }
 
             return childs;

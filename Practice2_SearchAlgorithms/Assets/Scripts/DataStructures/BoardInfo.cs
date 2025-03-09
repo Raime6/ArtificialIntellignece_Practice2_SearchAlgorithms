@@ -141,6 +141,7 @@ namespace Assets.Scripts.DataStructures
             var emptyCells = this.EmptyCells;
             var goalCell = emptyCells[Random.Range(0, emptyCells.Count)];
             goalCell.ItemInCell = new PlaceableItem("Goal", PlaceableItem.ItemType.Goal);
+            goalCell.ChangeToWalkable();
             cellNodeGoalsPosition.Add(goalCell.GetPosition);
 
             if (forPlanner)
@@ -190,6 +191,8 @@ namespace Assets.Scripts.DataStructures
             {
                 LayoutEnemiesAtRandom(enemyCount);
             }
+
+            manager.gameManager.character.InitializeAlgorithm();
         }
 
         public object Clone()

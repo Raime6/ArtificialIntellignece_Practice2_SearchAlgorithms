@@ -13,23 +13,24 @@ namespace Assets.Scripts
         protected AbstractPathMind PathController;
         public    BoardManager     BoardManager { get; set; }
         protected CellInfo         currentTarget;
+
+        private   bool             algorithmInitialized;
        
         void Awake()
         {
 
+            algorithmInitialized = false;
             PathController       = GetComponentInChildren<AStarMind>();
             PathController      .SetCharacter(this);
             LocomotionController = GetComponent<Locomotion>();
             LocomotionController.SetCharacter(this);
 
-            CellNode startNode = new CellNode(BoardManager.boardInfo.CellInfos[0, 0], null, Vector2.zero);
-            PathController.GetComponent<AStarMind>().Initialize(BoardManager.boardInfo, startNode);
         }
 
         void Update()
         {
             if (BoardManager == null) return;
-            if (LocomotionController.MoveNeed)
+            if (LocomotionController.MoveNeed && algorithmInitialized)
             {
 
                 var boardClone = (BoardInfo)BoardManager.boardInfo.Clone();
@@ -42,6 +43,14 @@ namespace Assets.Scripts
         public void SetCurrentTarget(CellInfo newTargetCell)
         {
             this.currentTarget = newTargetCell;
+        }
+
+        public void InitializeAlgorithm()
+        {
+            CellNode startNode = new CellNode(BoardManager.boardInfo.CellInfos[0, 0], null, Vector2.zero);
+            PathController.GetComponent<AStarMind>().Initialize(BoardManager.boardInfo, startNode);
+
+            algorithmInitialized = true;
         }
     }
 }

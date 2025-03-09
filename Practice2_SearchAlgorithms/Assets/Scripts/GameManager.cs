@@ -12,6 +12,8 @@ namespace Assets.Scripts
         public bool ForPlanner = false;
         public int numEnemies;
 
+        public CharacterBehaviour character;
+
         public List<GameObject> ActiveEnemies ;
 
         void Awake()
@@ -33,15 +35,15 @@ namespace Assets.Scripts
 
             //Get a component reference to the attached BoardManager script
             this.BoardManager = GetComponent<BoardManager>();
+            this.BoardManager.gameManager = this;
 
-            
+            character = GameObject.Find("Character").GetComponent<CharacterBehaviour>();
+            character.BoardManager = BoardManager;
+
         }
 
-        public void Start()
+        private void Start()
         {
-            
-            var character= GameObject.Find("Character").GetComponent<CharacterBehaviour>();
-            character.BoardManager= BoardManager;
             character.SetCurrentTarget(BoardManager.boardInfo.Exit);
         }
 

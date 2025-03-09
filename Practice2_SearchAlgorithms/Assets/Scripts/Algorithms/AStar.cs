@@ -15,7 +15,7 @@ namespace Assets.Scripts.Algorithms
         public List<CellNode> Behaviour(BoardInfo boardInfo, CellNode startNode)
         {
             List<CellNode> openList  = new List<CellNode>();
-            List<CellNode> closeList = new List<CellNode>();
+            List<string>   closeList = new List<string>();
             List<CellNode> sucesors  = new List<CellNode>();
 
             List<CellNode> goalPath  = new List<CellNode>();
@@ -36,15 +36,15 @@ namespace Assets.Scripts.Algorithms
                 node = openList[0];
 
                 openList .RemoveAt(0);
-                closeList.Add(node);
+                closeList.Add(node.cellInfo.CellId);
 
-                if (node.cellInfo.ItemInCell.Type == ItemType.Goal)
+                if (node.cellInfo.CellId == boardInfo.Exit.CellId)
                     break;
 
                 sucesors = node.Expand(boardInfo);
                 for (int i = 0; i < sucesors.Count; i++)
                 {
-                    if (!closeList.Contains(sucesors[i]))
+                    if (!closeList.Contains(sucesors[i].cellInfo.CellId))
                         InsertOrd(openList, sucesors[i]);
                 }
             }
@@ -71,20 +71,23 @@ namespace Assets.Scripts.Algorithms
 
         private int BinarySearch(List<CellNode> nodeList, CellNode node, int initPos, int lastPos)
         {
-            if (initPos >= lastPos)
-            {
-                if (node.F < nodeList[initPos].F || (node.F == nodeList[initPos].F && node.G < nodeList[initPos].G))
-                    return initPos;
-                else
-                    return initPos + 1;
-            }
+            if (initPos > lastPos)
+                return initPos;
 
             int middle = initPos + (lastPos - initPos) / 2;
 
-            if (node.F < nodeList[middle].F || (node.F == nodeList[initPos].F && node.G < nodeList[initPos].G))
-                return BinarySearch(nodeList, node, initPos, middle);
-            else
-                return BinarySearch(nodeList, node, middle + 1, lastPos);
+            if (nodeList[middle].F == node.F)
+            {
+                if (nodeList[middle].H > node.H)
+                    return BinarySearch(nodeList, node, initPos, middle - 1);
+                else
+                    return BinarySearch(nodeList, node, middle + 1, lastPos);
+            }
+
+            if (nodeList[middle].F > node.F)
+                return BinarySearch(nodeList, node, initPos, middle - 1);
+
+            return BinarySearch(nodeList, node, middle + 1, lastPos);
         }
     }
 }

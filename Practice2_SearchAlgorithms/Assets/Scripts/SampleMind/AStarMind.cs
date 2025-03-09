@@ -20,6 +20,7 @@ namespace Assets.Scripts.SampleMind
         public override Locomotion.MoveDirection GetNextMove(BoardInfo boardInfo, CellInfo currentPos, CellInfo[] goals)
         {
             Vector2 val = goalPath[0].cellInfo.GetPosition - currentPos.GetPosition;
+            goalPath.RemoveAt(0);
 
             if (val.Equals(Vector2.up))   return Locomotion.MoveDirection.Up;
             if (val.Equals(Vector2.down)) return Locomotion.MoveDirection.Down;

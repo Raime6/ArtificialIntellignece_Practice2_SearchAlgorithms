@@ -40,6 +40,12 @@ namespace Assets.Scripts.DataStructures
             this.WalkCost = float.MaxValue;
         }
 
+        public void ChangeToWalkable()
+        {
+            this.Walkable = true;
+            this.WalkCost = 1.0f;
+        }
+
         public object Clone()
         {
             var result = new CellInfo(this.ColumnId, this.RowId)
