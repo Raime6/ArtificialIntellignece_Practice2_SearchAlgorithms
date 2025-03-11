@@ -12,19 +12,18 @@ namespace Assets.Scripts.Algorithms
 {
     public class AStar
     {
-        public List<CellNode> Behaviour(BoardInfo boardInfo, CellNode startNode)
+        private List<CellNode> openList    = new List<CellNode>();
+        private List<string>   closeList   = new List<string>();
+        private List<CellNode> successors  = new List<CellNode>();
+
+        private List<CellNode> goalPath    = new List<CellNode>();
+
+        private CellNode       node;
+
+
+
+        public List<CellNode> Behaviour(Loader loader, BoardInfo boardInfo, CellNode startNode, ref int openListLength, ref int closeListLength)
         {
-            List<CellNode> openList  = new List<CellNode>();
-            List<string>   closeList = new List<string>();
-            List<CellNode> sucesors  = new List<CellNode>();
-
-            List<CellNode> goalPath  = new List<CellNode>();
-
-            CellNode node;
-
-
-
-            // Behaviour
             openList .Add(startNode);
 
             while (true)
@@ -41,13 +40,13 @@ namespace Assets.Scripts.Algorithms
                 if (node.cellInfo.CellId == boardInfo.Exit.CellId)
                     break;
 
-                sucesors = node.Expand(boardInfo);
-                for (int i = 0; i < sucesors.Count; i++)
-                {
-                    if (!closeList.Contains(sucesors[i].cellInfo.CellId))
-                        InsertOrd(openList, sucesors[i]);
-                }
+                successors = node.Expand(boardInfo);
+                for (int i = 0; i < successors.Count; i++)
+                    Insert(loader.algorithmOptimized, openList, successors[i]);
             }
+
+            openListLength  = openList .Count;
+            closeListLength = closeList.Count;
 
             do
             {
@@ -62,32 +61,48 @@ namespace Assets.Scripts.Algorithms
 
 
 
-        private void InsertOrd(List<CellNode> nodeList, CellNode node)
+        private void Insert(Loader.Optimization optimization, List<CellNode> nodeList, CellNode nodeSuccessor)
         {
-            int index = BinarySearch(nodeList, node, 0, nodeList.Count - 1);
-
-            nodeList.Insert(index, node);
+            if (optimization == Loader.Optimization.SIMPLE_LOOP)
+            {
+                if (node.cellInfo.CellId != nodeSuccessor.cellInfo.CellId)
+                    InsertOrd(nodeList, nodeSuccessor);
+            }
+            else if (optimization == Loader.Optimization.COMPLEX_LOOP)
+            {
+                if (!closeList.Contains(nodeSuccessor.cellInfo.CellId))
+                    InsertOrd(nodeList, nodeSuccessor);
+            }
+            else
+                InsertOrd(nodeList, nodeSuccessor);
         }
 
-        private int BinarySearch(List<CellNode> nodeList, CellNode node, int initPos, int lastPos)
+        private void InsertOrd(List<CellNode> nodeList, CellNode nodeSuccessor)
+        {
+            int index = BinarySearch(nodeList, nodeSuccessor, 0, nodeList.Count - 1);
+
+            nodeList.Insert(index, nodeSuccessor);
+        }
+
+        private int BinarySearch(List<CellNode> nodeList, CellNode nodeSuccessor, int initPos, int lastPos)
         {
             if (initPos > lastPos)
                 return initPos;
 
             int middle = initPos + (lastPos - initPos) / 2;
 
-            if (nodeList[middle].F == node.F)
+            if (nodeList[middle].F == nodeSuccessor.F)
             {
-                if (nodeList[middle].H > node.H)
-                    return BinarySearch(nodeList, node, initPos, middle - 1);
+                if (nodeList[middle].H > nodeSuccessor.H)
+                    return BinarySearch(nodeList, nodeSuccessor, initPos, middle - 1);
                 else
-                    return BinarySearch(nodeList, node, middle + 1, lastPos);
+                    return BinarySearch(nodeList, nodeSuccessor, middle + 1, lastPos);
             }
 
-            if (nodeList[middle].F > node.F)
-                return BinarySearch(nodeList, node, initPos, middle - 1);
+            if (nodeList[middle].F > nodeSuccessor.F)
+                return BinarySearch(nodeList, nodeSuccessor, initPos, middle - 1);
 
-            return BinarySearch(nodeList, node, middle + 1, lastPos);
+            return BinarySearch(nodeList, nodeSuccessor, middle + 1, lastPos);
         }
     }
 }

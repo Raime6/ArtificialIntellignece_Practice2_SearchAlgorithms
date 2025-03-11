@@ -11,6 +11,7 @@ namespace Assets.Scripts
         
         protected Locomotion       LocomotionController;
         protected AbstractPathMind PathController;
+        public    Loader           loader;
         public    BoardManager     BoardManager { get; set; }
         protected CellInfo         currentTarget;
 
@@ -20,7 +21,12 @@ namespace Assets.Scripts
         {
 
             algorithmInitialized = false;
-            PathController       = GetComponentInChildren<AStarMind>();
+
+            if (loader.characterAlgorithm == Loader.Algorithm.BFS)
+                PathController       = GetComponentInChildren<BFSMind>();
+            else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
+                PathController = GetComponentInChildren<AStarMind>();
+
             PathController      .SetCharacter(this);
             LocomotionController = GetComponent<Locomotion>();
             LocomotionController.SetCharacter(this);
@@ -48,7 +54,11 @@ namespace Assets.Scripts
         public void InitializeAlgorithm()
         {
             CellNode startNode = new CellNode(BoardManager.boardInfo.CellInfos[0, 0], null, Vector2.zero);
-            PathController.GetComponent<AStarMind>().Initialize(BoardManager.boardInfo, startNode);
+
+            if (loader.characterAlgorithm == Loader.Algorithm.BFS)
+                PathController.GetComponent<BFSMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+            else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
+                PathController.GetComponent<AStarMind>().Initialize(loader, BoardManager.boardInfo, startNode);
 
             algorithmInitialized = true;
         }

@@ -1,13 +1,30 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Algorithms;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class Loader : MonoBehaviour
     {
-        public GameObject gameManager;          //GameManager prefab to instantiate.
-        public bool Planner=false;
-        public int seed = 2016;
-        public int numEnemies = 0;
+        public enum Algorithm
+        {
+            BFS,
+            ASTAR
+        }
+
+        public enum Optimization
+        {
+            NONE,
+            SIMPLE_LOOP,
+            COMPLEX_LOOP
+        }
+
+        public GameObject   gameManager;          //GameManager prefab to instantiate.
+        public bool         Planner             = false;
+        public int          seed                = 2016;
+        public int          numEnemies          = 0;
+        public Algorithm    characterAlgorithm  = Algorithm.BFS;
+        public Optimization algorithmOptimized  = Optimization.NONE;
+
         void Awake()
         {
             //Check if a GameManager has already been assigned to static variable GameManager.instance or if it's still null
