@@ -8,7 +8,9 @@ namespace Assets.Scripts
         public enum Algorithm
         {
             BFS,
-            ASTAR
+            ASTAR,
+            BFS_ONLINE,
+            ASTAR_ONLINE
         }
 
         public enum Optimization

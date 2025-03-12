@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.DataStructures;
 using Assets.Scripts.SampleMind;
 using System.Dynamic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
 {
@@ -22,10 +24,24 @@ namespace Assets.Scripts
 
             algorithmInitialized = false;
 
-            if (loader.characterAlgorithm == Loader.Algorithm.BFS)
-                PathController       = GetComponentInChildren<BFSMind>();
-            else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
-                PathController = GetComponentInChildren<AStarMind>();
+            if(SceneManager.GetActiveScene().name == "PathFinding")
+            {
+                if (loader.characterAlgorithm == Loader.Algorithm.BFS)
+                    PathController = GetComponentInChildren<BFSMind>();
+                else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
+                    PathController = GetComponentInChildren<AStarMind>();
+                else
+                    PathController = GetComponentInChildren<RandomMind>();
+            }
+            else if(SceneManager.GetActiveScene().name == "Enemies")
+            {
+                //if (loader.characterAlgorithm == Loader.Algorithm.BFS_ONLINE)
+                //    PathController = GetComponentInChildren<BFSMindOnlin>();
+                if (loader.characterAlgorithm == Loader.Algorithm.ASTAR_ONLINE)
+                    PathController = GetComponentInChildren<AStarOnlineMind>();
+                else
+                    PathController = GetComponentInChildren<RandomMind>();
+            }
 
             PathController      .SetCharacter(this);
             LocomotionController = GetComponent<Locomotion>();
@@ -55,10 +71,18 @@ namespace Assets.Scripts
         {
             CellNode startNode = new CellNode(BoardManager.boardInfo.CellInfos[0, 0], null, Vector2.zero);
 
-            if (loader.characterAlgorithm == Loader.Algorithm.BFS)
-                PathController.GetComponent<BFSMind>().Initialize(loader, BoardManager.boardInfo, startNode);
-            else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
-                PathController.GetComponent<AStarMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+            if (SceneManager.GetActiveScene().name == "PathFinding")
+            {
+                if (loader.characterAlgorithm == Loader.Algorithm.BFS)
+                    PathController.GetComponent<BFSMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+                else if (loader.characterAlgorithm == Loader.Algorithm.ASTAR)
+                    PathController.GetComponent<AStarMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+            }
+            else if (SceneManager.GetActiveScene().name == "Enemies")
+            {
+                if (loader.characterAlgorithm == Loader.Algorithm.ASTAR_ONLINE)
+                    PathController.GetComponent<AStarOnlineMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+            }
 
             algorithmInitialized = true;
         }

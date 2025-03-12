@@ -28,7 +28,6 @@ namespace Assets.Scripts.Algorithms
 
             while (true)
             {
-
                 if (openList.Count <= 0)
                     return null;
 
