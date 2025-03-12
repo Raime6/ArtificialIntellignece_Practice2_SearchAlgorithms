@@ -30,7 +30,7 @@ namespace Assets.Scripts.Algorithms
 
             openList.RemoveAt(0);
 
-            if (node.cellInfo.CellId == boardInfo.Exit.CellId)
+            if (node.cellInfo.CellId == boardInfo.currentGoalPosition)
                 return node;
 
             successors = node.Expand(boardInfo);

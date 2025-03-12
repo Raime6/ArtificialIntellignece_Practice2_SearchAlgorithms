@@ -23,6 +23,7 @@ namespace Assets.Scripts.DataStructures
         public int NumRows { get; private set; }
         public CellInfo[,] CellInfos { get; set; }
         public List<Vector2> cellNodeGoalsPosition = new List<Vector2>();
+        public string currentGoalPosition;
 
         public List<EnemyBehaviour> Enemies
         {

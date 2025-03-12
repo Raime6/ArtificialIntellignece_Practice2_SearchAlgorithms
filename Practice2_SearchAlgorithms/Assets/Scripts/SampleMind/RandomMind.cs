@@ -10,9 +10,9 @@ namespace Assets.Scripts.SampleMind
             
             var val = Random.Range(0, 4);
             if (val == 0) return Locomotion.MoveDirection.Up;
-            if (val == 1) return Locomotion.MoveDirection.Down;
-            if (val == 2) return Locomotion.MoveDirection.Left;
-            return Locomotion.MoveDirection.Right;
+            if (val == 1) return Locomotion.MoveDirection.Right;
+            if (val == 2) return Locomotion.MoveDirection.Down;
+            return Locomotion.MoveDirection.Left;
         }
     }
 }

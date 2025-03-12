@@ -13,7 +13,7 @@ namespace Assets.Scripts
         
         protected Locomotion       LocomotionController;
         protected AbstractPathMind PathController;
-        public    Loader           loader;
+        private   Loader           loader;
         public    BoardManager     BoardManager { get; set; }
         protected CellInfo         currentTarget;
 
@@ -21,8 +21,8 @@ namespace Assets.Scripts
        
         void Awake()
         {
-
             algorithmInitialized = false;
+            loader = GameObject.Find("Loader").GetComponent<Loader>();
 
             if(SceneManager.GetActiveScene().name == "PathFinding")
             {
