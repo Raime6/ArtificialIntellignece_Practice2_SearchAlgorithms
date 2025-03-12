@@ -45,11 +45,10 @@ namespace Assets.Scripts.Algorithms
 
         private void Insert(Loader.Optimization optimization, List<CellNode> nodeList, CellNode nodeSuccessor)
         {
-            if (optimization == Loader.Optimization.SIMPLE_LOOP)
+            if (optimization == Loader.Optimization.SIMPLE_LOOP && node.parent != null)
             {
-                if(node.parent != null)
-                    if (nodeSuccessor.cellInfo.CellId != node.parent.cellInfo.CellId)
-                        InsertOrd(nodeList, nodeSuccessor);
+                if (nodeSuccessor.cellInfo.CellId != node.parent.cellInfo.CellId)
+                    InsertOrd(nodeList, nodeSuccessor);
             }
             else if (optimization == Loader.Optimization.COMPLEX_LOOP)
             {
