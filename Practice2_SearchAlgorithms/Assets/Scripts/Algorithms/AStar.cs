@@ -16,14 +16,12 @@ namespace Assets.Scripts.Algorithms
         private List<string>   closeList   = new List<string>();
         private List<CellNode> successors  = new List<CellNode>();
 
-        private List<CellNode> goalPath    = new List<CellNode>();
-
-        private CellNode       node;
-
-
+        private CellNode node;
 
         public List<CellNode> Behaviour(Loader loader, BoardInfo boardInfo, CellNode startNode, ref int openListLength, ref int closeListLength)
         {
+            List<CellNode> goalPath = new List<CellNode>();
+
             openList .Add(startNode);
 
             while (true)
@@ -64,8 +62,9 @@ namespace Assets.Scripts.Algorithms
         {
             if (optimization == Loader.Optimization.SIMPLE_LOOP)
             {
-                if (node.cellInfo.CellId != nodeSuccessor.cellInfo.CellId)
-                    InsertOrd(nodeList, nodeSuccessor);
+                if(node.parent != null)
+                    if (nodeSuccessor.cellInfo.CellId != node.parent.cellInfo.CellId)
+                        InsertOrd(nodeList, nodeSuccessor);
             }
             else if (optimization == Loader.Optimization.COMPLEX_LOOP)
             {

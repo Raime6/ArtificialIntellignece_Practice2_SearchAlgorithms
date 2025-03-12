@@ -12,17 +12,19 @@ namespace Assets.Scripts.SampleMind
 
         private AStarOnline aStarOnline;
         private CellNode    currentNode;
+        private Loader      loader;
 
         public void Initialize(Loader loader, BoardInfo boardInfo, CellNode startNode)
         {
             aStarOnline = new AStarOnline();
 
             currentNode = startNode;
+            this.loader = loader;
         }
 
         public override Locomotion.MoveDirection GetNextMove(BoardInfo boardInfo, CellInfo currentPos, CellInfo[] goals)
         {
-            currentNode = aStarOnline.Behaviour(boardInfo, currentNode);
+            currentNode = aStarOnline.Behaviour(loader, boardInfo, currentNode);
 
             Vector2 val = currentNode.cellInfo.GetPosition - currentPos.GetPosition;
 

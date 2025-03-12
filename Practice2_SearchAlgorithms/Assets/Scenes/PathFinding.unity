@@ -425,7 +425,7 @@ MonoBehaviour:
   Planner: 0
   seed: 2020
   numEnemies: 0
-  characterAlgorithm: 1
+  characterAlgorithm: 0
   algorithmOptimized: 0
 --- !u!4 &1401979017
 Transform:
