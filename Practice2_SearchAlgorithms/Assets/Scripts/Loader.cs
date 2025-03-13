@@ -9,7 +9,6 @@ namespace Assets.Scripts
         {
             BFS,
             ASTAR,
-            BFS_ONLINE,
             ASTAR_ONLINE
         }
 
@@ -25,6 +24,7 @@ namespace Assets.Scripts
         public int          seed                = 2016;
         public int          numEnemies          = 0;
         public Algorithm    characterAlgorithm  = Algorithm.BFS;
+        public int          deepness            = 0;
         public Optimization algorithmOptimized  = Optimization.NONE;
 
         void Awake()

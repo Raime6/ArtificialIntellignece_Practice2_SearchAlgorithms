@@ -81,7 +81,7 @@ namespace Assets.Scripts
             else if (SceneManager.GetActiveScene().name == "Enemies")
             {
                 if (loader.characterAlgorithm == Loader.Algorithm.ASTAR_ONLINE)
-                    PathController.GetComponent<AStarOnlineMind>().Initialize(loader, BoardManager.boardInfo, startNode);
+                    PathController.GetComponent<AStarOnlineMind>().Initialize(loader, BoardManager.boardInfo, startNode, loader.deepness);
             }
 
             algorithmInitialized = true;

@@ -13,32 +13,50 @@ namespace Assets.Scripts.Algorithms
 {
     public class AStarOnline
     {
-        private List<string> closeList = new List<string>();
+        private List<string> closeList;
         private CellNode node;
 
-        public CellNode Behaviour(Loader loader, BoardInfo boardInfo, CellNode currentNode)
+        public CellNode Behaviour(Loader loader, BoardInfo boardInfo, CellNode currentNode, int deepness, ref int openListLength, ref int closeListLength, ref int goalPathLength)
         {
-            List<CellNode> openList = new List<CellNode>();
+            List<CellNode> openList   = new List<CellNode>();
             List<CellNode> successors = new List<CellNode>();
+            List<CellNode> goalPath   = new List<CellNode>();
+
+            closeList = new List<string>();
 
             openList.Add(currentNode);
 
-            if (openList.Count <= 0)
-                return null;
+            for (int i = 0; i <= deepness; i++)
+            {
+                if (openList.Count <= 0)
+                    return null;
 
-            node = openList[0];
+                node = openList[0];
 
-            openList.RemoveAt(0);
-            closeList.Add(node.cellInfo.CellId);
+                openList.RemoveAt(0);
+                closeList.Add(node.cellInfo.CellId);
 
-            if (node.cellInfo.CellId == boardInfo.currentGoalPosition)
-                return node;
+                if (node.cellInfo.CellId == (boardInfo.currentGoalPosition.x + "," + boardInfo.currentGoalPosition.y))
+                    break;
 
-            successors = node.Expand(boardInfo);
-            for (int i = 0; i < successors.Count; i++)
-                Insert(loader.algorithmOptimized, openList, successors[i]);
+                successors = node.Expand(boardInfo);
+                for (int j = 0; j < successors.Count; j++)
+                    Insert(loader.algorithmOptimized, openList, successors[j]);
+            }
 
-            return openList[0];
+            do
+            {
+                goalPath.Add(node);
+                node = node.parent;
+            } while (node.parent != null);
+
+            goalPath.Reverse();
+
+            openListLength  = openList.Count;
+            closeListLength = closeList.Count;
+            goalPathLength  = goalPath.Count;
+
+            return goalPath[0];
         }
 
 

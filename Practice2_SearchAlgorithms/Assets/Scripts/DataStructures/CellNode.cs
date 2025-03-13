@@ -53,6 +53,14 @@ namespace Assets.Scripts.DataStructures
             return result;
         }
 
+        public void Reset()
+        {
+            this.parent = null;
+            this.G = 0;
+            this.H = 0;
+            this.F = 0;
+        }
+
 
 
         public List<CellNode> Expand(BoardInfo boardInfo)
@@ -60,27 +68,11 @@ namespace Assets.Scripts.DataStructures
             List<CellNode> childs     = new List<CellNode>();
             CellInfo[]     neighbours = cellInfo.WalkableNeighbours(boardInfo);
 
-            Vector2 goalPosition;
-
-            if (SceneManager.GetActiveScene().name == "Enemies")
-            {
-                if(boardInfo.Enemies.Count > 0)
-                {
-                    goalPosition = GetNearestEnemy(boardInfo.Enemies);
-                }
-                else
-                    goalPosition = new Vector2(boardInfo.Exit.ColumnId, boardInfo.Exit.RowId);
-            }
-            else
-                goalPosition = new Vector2(boardInfo.Exit.ColumnId, boardInfo.Exit.RowId);
-
-            boardInfo.currentGoalPosition = goalPosition.x + "," + goalPosition.y;
-
             for (int i = 0; i < neighbours.Length; i++)
             {
                 if(neighbours[i] != null)
                 {
-                    CellNode node = new CellNode(neighbours[i], this, goalPosition);
+                    CellNode node = new CellNode(neighbours[i], this, boardInfo.currentGoalPosition);
 
                     childs.Add(node);
                 }
@@ -96,30 +88,9 @@ namespace Assets.Scripts.DataStructures
             return CalculateManhattanDistance(cellNodePosition, cellNodeGoalPosistion);
         }
 
-        private float CalculateManhattanDistance(Vector2 node, Vector2 nodeGoal)
+        public float CalculateManhattanDistance(Vector2 node, Vector2 nodeGoal)
         {
             return Math.Abs(node.x - nodeGoal.x) + Math.Abs(node.y - nodeGoal.y);
-        }
-
-        private Vector2 GetNearestEnemy(List<EnemyBehaviour> enemies)
-        {
-            Vector2 nearestEnemyPosition;
-            Vector2 enemyPosition;
-            
-            if (enemies.Count == 1)
-                return enemies[0].CurrentPosition().GetPosition;
-
-            nearestEnemyPosition = enemies[0].CurrentPosition().GetPosition;
-
-            for (int i = 1; i < enemies.Count; i++)
-            {
-                enemyPosition = enemies[i].CurrentPosition().GetPosition;
-
-                if (CalculateManhattanDistance(this.cellInfo.GetPosition, nearestEnemyPosition) > CalculateManhattanDistance(this.cellInfo.GetPosition, enemyPosition))
-                    nearestEnemyPosition = enemyPosition;
-            }
-
-            return nearestEnemyPosition;
         }
     }
 }
