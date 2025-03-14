@@ -2,7 +2,6 @@
 using Assets.Scripts;
 using Assets.Scripts.DataStructures;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Assets.Scripts.DataStructures.PlaceableItem;
 
@@ -16,12 +15,12 @@ namespace Assets.Scripts.Algorithms
         private List<string>   closeList   = new List<string>();
         private List<CellNode> successors  = new List<CellNode>();
 
+        private List<CellNode> goalPath    = new List<CellNode>();
+
         private CellNode node;
 
         public List<CellNode> Behaviour(Loader loader, BoardInfo boardInfo, CellNode startNode, ref int openListLength, ref int closeListLength)
         {
-            List<CellNode> goalPath = new List<CellNode>();
-
             openList .Add(startNode);
 
             while (true)
