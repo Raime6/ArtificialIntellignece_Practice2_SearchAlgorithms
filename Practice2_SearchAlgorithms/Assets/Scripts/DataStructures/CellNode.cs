@@ -80,6 +80,17 @@ namespace Assets.Scripts.DataStructures
             return childs;
         }
 
+        public bool IsInList(List<CellNode> list)
+        {
+            for(int i = 0; i < list.Count; i++)
+            {
+                if (list[i].cellInfo.CellId == this.cellInfo.CellId)
+                    return true;
+            }
+
+            return false;
+        }
+
         private float CalulateH(Vector2 cellNodeGoalPosistion)
         {
             Vector2 cellNodePosition = cellInfo.GetPosition;

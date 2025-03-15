@@ -406,8 +406,8 @@ MonoBehaviour:
   seed: 2020
   numEnemies: 2
   characterAlgorithm: 2
-  deepness: 12
-  algorithmOptimized: 2
+  deepness: 1
+  algorithmOptimized: 0
 --- !u!4 &1401979017
 Transform:
   m_ObjectHideFlags: 0

@@ -12,16 +12,17 @@ namespace Assets.Scripts.Algorithms
 {
     public class AStarOnline
     {
-        private List<string> closeList;
+        private List<CellNode> openList;
+        private List<CellNode> closeList;
         private CellNode node;
 
         public CellNode Behaviour(Loader loader, BoardInfo boardInfo, CellNode currentNode, int deepness, ref int openListLength, ref int closeListLength, ref int goalPathLength)
-        {
-            List<CellNode> openList   = new List<CellNode>();
+        {            
             List<CellNode> successors = new List<CellNode>();
             List<CellNode> goalPath   = new List<CellNode>();
 
-            closeList = new List<string>();
+            openList  = new List<CellNode>();
+            closeList = new List<CellNode>();
 
             openList.Add(currentNode);
 
@@ -33,7 +34,7 @@ namespace Assets.Scripts.Algorithms
                 node = openList[0];
 
                 openList.RemoveAt(0);
-                closeList.Add(node.cellInfo.CellId);
+                closeList.Add(node);
 
                 if (node.cellInfo.CellId == (boardInfo.currentGoalPosition.x + "," + boardInfo.currentGoalPosition.y))
                     break;
@@ -69,7 +70,7 @@ namespace Assets.Scripts.Algorithms
             }
             else if (optimization == Loader.Optimization.COMPLEX_LOOP)
             {
-                if (!closeList.Contains(nodeSuccessor.cellInfo.CellId))
+                if (!nodeSuccessor.IsInList(closeList) && !nodeSuccessor.IsInList(openList))
                     InsertOrd(nodeList, nodeSuccessor);
             }
             else

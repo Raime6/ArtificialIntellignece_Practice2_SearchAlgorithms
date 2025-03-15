@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Algorithms;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -26,12 +27,14 @@ namespace Assets.Scripts
         public Algorithm    characterAlgorithm  = Algorithm.BFS;
         public int          deepness            = 0;
         public Optimization algorithmOptimized  = Optimization.NONE;
+        public Stopwatch    stopwatch           = new Stopwatch();
 
         void Awake()
         {
             //Check if a GameManager has already been assigned to static variable GameManager.instance or if it's still null
             if (GameManager.instance == null)
             {
+                stopwatch.Start();
                 //Instantiate gameManager prefab
                 var obj = Instantiate(gameManager) as GameObject;
                 obj.name = "GameManager";

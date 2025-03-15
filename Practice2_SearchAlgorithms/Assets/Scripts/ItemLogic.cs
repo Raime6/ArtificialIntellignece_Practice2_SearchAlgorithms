@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Assets.Scripts.DataStructures;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Assets.Scripts
 {
     public class ItemLogic : MonoBehaviour
     {
+        private Loader loader;
 
         public string Tag {get { return PlaceableItem!=null?PlaceableItem.Tag:""; } }
         
@@ -27,9 +29,14 @@ namespace Assets.Scripts
             }
         }
 
+        private void Awake()
+        {
+            loader = GameObject.Find("Loader").GetComponent<Loader>();
+        }
+
         public void Start()
         {
-            Debug.Log(Tag+ ">"+ RequieredTags);
+            UnityEngine.Debug.Log(Tag+ ">"+ RequieredTags);
             
         }
         void OnTriggerEnter2D(Collider2D collider2D)
@@ -46,7 +53,11 @@ namespace Assets.Scripts
 
 
             if (this.Type == PlaceableItem.ItemType.Goal && GameManager.instance.ActiveEnemies.Count == 0)
+            {
+                loader.stopwatch.Stop();
+                UnityEngine.Debug.Log("Time to complete level: " + loader.stopwatch.ElapsedMilliseconds + " ms");
                 QuitGame();
+            }
             if (this.Type == PlaceableItem.ItemType.Enemy)
             {
                 GameManager.instance.ActiveEnemies.Remove(gameObject);
