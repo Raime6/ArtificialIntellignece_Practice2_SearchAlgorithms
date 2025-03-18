@@ -194,7 +194,7 @@ namespace Assets.Scripts.DataStructures
             }
 
             CellInfos[0, 0].ChangeToWalkable();
-            manager.gameManager.character.InitializeAlgorithm();
+            //manager.gameManager.character.InitializeAlgorithm();
         }
 
         public object Clone()

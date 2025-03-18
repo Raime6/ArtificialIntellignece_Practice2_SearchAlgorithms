@@ -47,7 +47,10 @@ namespace Assets.Scripts
             LocomotionController.SetCharacter(this);
 
         }
-
+        private void Start()
+        {
+            InitializeAlgorithm();
+        }
         void Update()
         {
             if (BoardManager == null) return;
